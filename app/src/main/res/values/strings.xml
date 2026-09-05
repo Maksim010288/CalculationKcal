@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CalculationKcal</string>
+    <string name="calc_kcal">Калькулятор калорій</string>
+    <string name="calculation">Розрахувати</string>
+    <string name="enterLoad">Виберіть активність</string>
+    <string name="enterHuman">Виберіть стать</string>
+    <string name="enterGoal">Виберіть ціль</string>
+</resources>

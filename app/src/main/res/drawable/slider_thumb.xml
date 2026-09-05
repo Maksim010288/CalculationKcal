@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#1A000000" />
+            <size android:width="28dp" android:height="28dp" />
+        </shape>
+    </item>
+    <!-- Белый ободок -->
+    <item android:top="1dp" android:left="1dp" android:right="1dp" android:bottom="1dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+    <!-- Основной зеленый кружок -->
+    <item android:top="3dp" android:left="3dp" android:right="3dp" android:bottom="3dp">
+        <shape android:shape="oval">
+            <solid android:color="#2ECC71" /> <!-- Замените на ваш точный зеленый гекс-код -->
+        </shape>
+    </item>
+
+</layer-list>
