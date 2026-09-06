@@ -95,10 +95,10 @@ public class AppUpdater {
                 // Знаходимо завантажений файл за вказаним раніше шляхом
                 File apkFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "update.apk");
 
-                if (apkFile.exists()) {
+             //   if (apkFile.exists()) {
                     // Викликаємо метод встановлення, який ми розбирали раніше
                     UpdateInstaller.installApk(context, apkFile);
-                }
+                //}
             }
         }
     };
