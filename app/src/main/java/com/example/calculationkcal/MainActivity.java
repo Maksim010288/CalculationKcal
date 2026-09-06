@@ -19,6 +19,8 @@ import com.example.calculationkcal.model.ActivityModel;
 import com.example.calculationkcal.model.GoalModel;
 import com.example.calculationkcal.model.MarkerModel;
 import com.example.calculationkcal.model.SexHumanModel;
+import com.example.calculationkcal.update.AppUpdater;
+import com.example.calculationkcal.update.UpdateInstaller;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        AppUpdater appUpdater = new AppUpdater(this);
+        appUpdater.fetchJsonAndCheckUpdate();
 
         View main = findViewById(R.id.main);
         weightView = findViewById(R.id.weightSeekBarText);

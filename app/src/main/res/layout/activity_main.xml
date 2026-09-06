@@ -17,7 +17,7 @@
         android:padding="20dp"
         android:text="@string/calc_kcal"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:textSize="26sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
