@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.calculationkcal"
         minSdk = 27
         targetSdk = 36
-        versionCode = 7
-        versionName = "2.7"
+        versionCode = 8
+        versionName = "2.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
