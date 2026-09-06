@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -29,7 +30,7 @@ public class AppUpdater {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private static final String JSON_URL = "https://github.com/Maksim010288/CalculationKcal/blob/master/app/update.json";
+    private static final String JSON_URL = "https://raw.githubusercontent.com/Maksim010288/CalculationKcal/master/app/update.json";
 
 
     public AppUpdater(Context context) {
@@ -43,6 +44,7 @@ public class AppUpdater {
             long currentVersionCode = pInfo.versionCode; // Поточна версія додатка
 
             if (serverVersionCode > currentVersionCode) {
+                Log.i("jsonformat", String.valueOf("виконано"));
                 // Якщо на сервері версія новіша — запускаємо завантаження
                 startDownloading(apkUrl);
             }
@@ -65,7 +67,17 @@ public class AppUpdater {
         DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         if (manager != null) {
             // Реєструємо приймач, який спрацює, коли завантаження завершиться
-            context.registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            // context.registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(onDownloadComplete,
+                        new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                        Context.RECEIVER_EXPORTED);
+            } else {
+                context.registerReceiver(onDownloadComplete,
+                        new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            }
+
             downloadId = manager.enqueue(request); // Запуск завантаження
         }
     }
@@ -112,10 +124,12 @@ public class AppUpdater {
                 // Парсимо JSON
                 JSONObject jsonObject = new JSONObject(response.toString());
                 int serverVersionCode = jsonObject.getInt("versionCode");
-                String apkUrl = jsonObject.getString("apkUrl");
+                String apkUrl = jsonObject.getString("downloadUrl");
+
 
                 // Повертаємося в головний потік для виклику вашої логіки перевірки
                 mainHandler.post(() -> checkAndDownloadUpdate(serverVersionCode, apkUrl));
+
 
             } catch (Exception e) {
                 e.printStackTrace();
