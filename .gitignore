@@ -20,3 +20,7 @@ gradlew
 gradlew.bat
 key/
 settings.gradle.kts
+MyUpdateInstaler
+AppUpdate
+build
+my-installer-library
