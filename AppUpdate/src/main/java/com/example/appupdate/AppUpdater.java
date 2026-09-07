@@ -1,4 +1,5 @@
-package com.example.calculationkcal.update;
+package com.example.appupdate;
+
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -14,6 +15,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.myupdateinstaler.UpdateInstaller;
 
 import org.json.JSONObject;
 
@@ -99,6 +102,7 @@ public class AppUpdater {
              //   if (apkFile.exists()) {
                     // Викликаємо метод встановлення, який ми розбирали раніше
                     UpdateInstaller.installApk(context, apkFile);
+
                 //}
             }
         }

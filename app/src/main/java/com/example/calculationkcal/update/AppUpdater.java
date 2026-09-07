@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -74,8 +76,7 @@ public class AppUpdater {
                         new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
                         Context.RECEIVER_EXPORTED);
             } else {
-                context.registerReceiver(onDownloadComplete,
-                        new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                ContextCompat.registerReceiver(context, onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), ContextCompat.RECEIVER_NOT_EXPORTED);
             }
 
             downloadId = manager.enqueue(request); // Запуск завантаження

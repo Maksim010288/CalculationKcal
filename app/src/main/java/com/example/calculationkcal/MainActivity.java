@@ -19,7 +19,7 @@ import com.example.calculationkcal.model.ActivityModel;
 import com.example.calculationkcal.model.GoalModel;
 import com.example.calculationkcal.model.MarkerModel;
 import com.example.calculationkcal.model.SexHumanModel;
-import com.example.calculationkcal.update.AppUpdater;
+import com.example.appupdate.AppUpdater;
 import com.example.calculationkcal.update.UpdateInstaller;
 
 public class MainActivity extends AppCompatActivity {
