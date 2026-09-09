@@ -1,7 +1,13 @@
 package com.example.calculationkcal;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -13,6 +19,8 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -33,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
             completeTextViewLoad, completeTextViewGoal;
     private Button calculationBut;
     private StepCounterModule stepCounterModule;
+    private SensorManager sensorManager;
+    private Sensor stepSensor;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
         SeekBarLogic ageBarLogic = new SeekBarLogic(this, ageView, ageSeekBar);
         ageBarLogic.startLogic(main, MarkerModel.AGE);
 
-        ActionStepModule actionStepModule = new ActionStepModule(
-                this, this, stepCounterModule, stepsTextView, PERMISSION_REQUEST_CODE);
-        actionStepModule.startedModule();
+        checkPermissionsAndStartService();
 
         calculationBut.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -152,10 +161,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkPermissionsAndStartService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 100);
+            } else {
+                startStepService();
+            }
+        } else {
+            startStepService();
+        }
+    }
+
+
+    private void startStepService() {
+        Intent serviceIntent = new Intent(this, StepCounterService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Обов'язково звільняємо ресурси
-        stepCounterModule.stopListening();
     }
 }
