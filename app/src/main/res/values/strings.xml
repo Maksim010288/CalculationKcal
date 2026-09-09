@@ -5,4 +5,5 @@
     <string name="enterLoad">Виберіть активність</string>
     <string name="enterHuman">Виберіть стать</string>
     <string name="enterGoal">Виберіть ціль</string>
+    <string name="zero">0</string>
 </resources>

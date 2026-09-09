@@ -1,35 +1,38 @@
 package com.example.calculationkcal;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.calculationkcal.update.AppUpdater;
 import com.example.calculationkcal.model.ActivityModel;
 import com.example.calculationkcal.model.GoalModel;
 import com.example.calculationkcal.model.MarkerModel;
 import com.example.calculationkcal.model.SexHumanModel;
-import com.example.appupdate.AppUpdater;
-import com.example.calculationkcal.update.UpdateInstaller;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView weightView, heightView, ageView;
+    private final int PERMISSION_REQUEST_CODE = 100;
+    private TextView weightView, heightView, ageView, stepsTextView;
     private String weight, height, age;
     private SeekBar weightSeekBar, heightSeekBar, ageSeekBar;
     private AutoCompleteTextView completeTextViewHuman,
             completeTextViewLoad, completeTextViewGoal;
     private Button calculationBut;
+    private StepCounterModule stepCounterModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         completeTextViewLoad = findViewById(R.id.autoCompleteTextViewLoad);
         completeTextViewGoal = findViewById(R.id.autoCompleteTextViewGoal);
 
+        stepsTextView = findViewById(R.id.stepTextView);
+
         calculationBut = findViewById(R.id.calculationButton);
 
         SeekBarLogic heightBarLogic = new SeekBarLogic(this, weightView, weightSeekBar);
@@ -69,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
         SeekBarLogic ageBarLogic = new SeekBarLogic(this, ageView, ageSeekBar);
         ageBarLogic.startLogic(main, MarkerModel.AGE);
+
+        ActionStepModule actionStepModule = new ActionStepModule(
+                this, this, stepCounterModule, stepsTextView, PERMISSION_REQUEST_CODE);
+        actionStepModule.startedModule();
 
         calculationBut.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -129,5 +138,24 @@ public class MainActivity extends AppCompatActivity {
                 return GoalModel.TO_GAIN;
         }
         return null;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                stepCounterModule.startListening();
+            } else {
+                Toast.makeText(this, "Дозвіл відхилено! Шагомір не працюватиме.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Обов'язково звільняємо ресурси
+        stepCounterModule.stopListening();
     }
 }
