@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissionsAndStartService();
 
+        LogHelper.writeLog(this, MainActivity.class.toString());
+
         calculationBut.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
